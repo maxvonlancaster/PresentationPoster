@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+
+@*<div class="text-center">
+        <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vStbievz557V9CdVk4TuVt2pSDey7L3X6qK2gFJ0DCZm_h93wzxRkJpagywWvhkLD-YTVTMlTxmQePH/embed?start=false&loop=false&delayms=3000"
+                frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    </div>*@
+<div >
+    <ul id="themes" class="list-group"></ul>
+
+</div>
+
+<script>
+    var result;
+    const get = fetch("/getLectures")
+        .then(res => res.json())
+        .then((res) => { result = res; PopulateResult(res); });
+
+    function PopulateResult(res) {
+        console.log(res);
+        res.forEach(elem => {
+            $("#themes").append('<li class="text-center list-group-item" id="' + elem.id + '"> <div class="panel-body"> <p>' + elem.lecturer + '</p> <p>' + elem.lectureTheme + '</p> <a href=/Home/Presentation/'+ elem.id +'> View </a> </div> </li>');
+        });
+
+    }
+</script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
