@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PresentationPoster.Models;
 using TelegramAccess.Interfaces;
+using TelegramAccess.Services;
 
 namespace PresentationPoster.Controllers
 {
@@ -14,6 +15,7 @@ namespace PresentationPoster.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ILectureService _lectureService;
+        private MessagingService messagingService;
 
         public HomeController(ILogger<HomeController> logger, ILectureService lectureService)
         {
@@ -44,6 +46,13 @@ namespace PresentationPoster.Controllers
         public ActionResult GetLecture(int id)
         {
             return Json(_lectureService.GetLecture(id));
+        }
+
+        [HttpPost]
+        [Route("sendPage")]
+        public void SendPage(int i) 
+        {
+        
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
