@@ -22,5 +22,6 @@ namespace TelegramAccess.Constants
         public static string TelegramToken = "955563107:AAFBR8hVPedVsmCAy9JJ4C_DZTlzbDxjJzQ";
         public static string UserName = "";
         public static string Password = "";
+        public static string ChatId = "@real15x4Chernivtsi";
     }
 }

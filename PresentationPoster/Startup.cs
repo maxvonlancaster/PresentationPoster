@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TelegramAccess.Interfaces;
 using TelegramAccess.Services;
+using PresentationPoster.Services;
 
 namespace PresentationPoster
 {
@@ -30,14 +31,13 @@ namespace PresentationPoster
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ILectureService, LectureService>();
-            services.AddTransient<IMessagingService, MessagingService>();
             services.AddTransient<IParserService, ParserService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddUserValidator<CustomValidator>();
+                //.AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -11,6 +11,8 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System.IO;
 using System.Threading;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.InputFiles;
 
 namespace TelegramAccess.Services
 {
@@ -19,11 +21,16 @@ namespace TelegramAccess.Services
         private static readonly TelegramBotClient _client = new TelegramBotClient(Const.TelegramToken);
 
         private int lectureId;
+        private string _presentationId;
+        private SlidesService _slidesService;
 
-        //private List<Page> _pages -> initialize in constructor;
+        private IList<Page> _pages; 
 
         static string[] Scopes = { SlidesService.Scope.PresentationsReadonly };
         static string ApplicationName = "Google Slides API .NET Quickstart";
+
+        private static ChatId _chat = new ChatId(Const.ChatId);
+
 
         public MessagingService(int lectureId)
         {
@@ -32,21 +39,87 @@ namespace TelegramAccess.Services
             string stringId = lectureAdress.Split('/')[5];
             UserCredential credential;
 
+
+            using (var stream =
+                new FileStream("../TelegramAccess/credentials.json", FileMode.Open, FileAccess.Read))
+            {
+                // The file token.json stores the user's access and refresh tokens, and is created
+                // automatically when the authorization flow completes for the first time.
+                string credPath = "token.json";
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+                Console.WriteLine("Credential file saved to: " + credPath);
+            }
+
+            // Create Google Slides API service.
+            var service = new SlidesService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
+            _slidesService = service;
+
+            // Define request parameters.
+            _presentationId = stringId;
+            PresentationsResource.GetRequest request = service.Presentations.Get(_presentationId);
+
+            // Prints the number of slides and elements in a sample presentation:
+            // https://docs.google.com/presentation/d/1EAYk18WDjIG-zp_0vLm3CsfQh_i8eXc67Jo2O9C6Vuc/edit
+            Presentation presentation = request.Execute();
+            IList<Page> slides = presentation.Slides;
+            _pages = slides;
+            var thumbnail = new PresentationsResource.PagesResource.GetThumbnailRequest(service, _presentationId, slides[0].ObjectId);
+            Thumbnail v = thumbnail.Execute();
+
+            string imageUrl = v.ContentUrl;
+            System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(imageUrl);
+            webRequest.AllowWriteStreamBuffering = true;
+            webRequest.Timeout = 30000;
+
+            System.Net.WebResponse webResponse = webRequest.GetResponse();
+
+            System.IO.Stream streamI = webResponse.GetResponseStream();
+            SendStream(streamI);
         }
 
         public void ParsePage(int i) 
         {
-            
+            var thumbnail = new PresentationsResource.PagesResource.GetThumbnailRequest(_slidesService, _presentationId, _pages[i].ObjectId);
+            Thumbnail v = thumbnail.Execute();
+
+            string imageUrl = v.ContentUrl;
+            System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(imageUrl);
+            webRequest.AllowWriteStreamBuffering = true;
+            webRequest.Timeout = 30000;
+
+            System.Net.WebResponse webResponse = webRequest.GetResponse();
+
+            System.IO.Stream streamI = webResponse.GetResponseStream();
+            SendStream(streamI);
         }
 
         public void SendText(string message) 
         {
-        
+            _client.SendTextMessageAsync(_chat, message);
         }
 
         public void SendPost(byte[] message) 
         {
-        
+            using (Stream stream = new MemoryStream(message))
+            {
+                InputOnlineFile file = new InputOnlineFile(stream);
+                _client.SendPhotoAsync(_chat, file);
+            }
+        }
+
+        public void SendStream(Stream stream) 
+        {
+            InputOnlineFile file = new InputOnlineFile(stream);
+            _client.SendPhotoAsync(_chat, file);
         }
     }
 }

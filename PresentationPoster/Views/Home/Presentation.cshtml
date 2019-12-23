@@ -25,7 +25,7 @@
     <h4>Lecture</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt id="lectureId" class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd class="col-sm-10">
@@ -63,10 +63,12 @@
 <script>
     var clickIframe = window.setInterval(checkFocus, 1000);
     var i = 0;
+    var lectureId;
 
     function checkFocus() {
         if (document.activeElement == document.getElementById("frame")) {
             console.log("clicked " + (i++));
+            Send(i);
             window.focus();
         }
     }
@@ -80,7 +82,24 @@
                 elem.focus();
             }
         })
+        lectureId = Number(document.getElementById("lectureId").textContent);
     });
+
+    function Send(i) {
+        console.log("Lecture: ", lectureId);
+        const response = fetch("../SendPage/" + i + "", {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                'i': i
+            })
+        });
+            //.then(res => res.json())
+            //.then((result) => { console.log(result) });
+    }
 
     //document.getElementsByName("frame")[0].contentWindow.document.body.focus();
 

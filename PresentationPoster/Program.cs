@@ -22,5 +22,11 @@ namespace PresentationPoster
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        // TODO: 1 -> Access on login
+        // TODO: 2 -> Login with creds from Const file
+        // TODO: 3 -> 
+        // TODO: 4 -> 
+
     }
 }
