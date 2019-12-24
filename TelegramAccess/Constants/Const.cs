@@ -20,8 +20,8 @@ namespace TelegramAccess.Constants
             "https://docs.google.com/presentation/d/1o7C_X08hidIruI8J68WY-3HJ423BE7dRO0bYWTGbiTI/edit?usp=drivesdk"
         };
         public static string TelegramToken = "955563107:AAFBR8hVPedVsmCAy9JJ4C_DZTlzbDxjJzQ";
-        public static string UserName = "";
-        public static string Password = "";
+        public static string UserName = "AppPresentationUser@gmail.com";
+        public static string Password = "The777car777is777onfire";
         public static string ChatId = "@real15x4Chernivtsi";
     }
 }

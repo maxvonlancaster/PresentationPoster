@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using TelegramAccess.Interfaces;
 using TelegramAccess.Services;
 using PresentationPoster.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PresentationPoster
 {
@@ -36,7 +37,10 @@ namespace PresentationPoster
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddUserValidator<CustomValidator>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddUserStore<CustomUserStore>();
+                //.AddUserManager<UserManager<IdentityUser>>()
+                //.AddUserValidator<CustomValidator>();
                 //.AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
