@@ -16,15 +16,17 @@ using Telegram.Bot.Types.InputFiles;
 
 namespace TelegramAccess.Services
 {
-    public class MessagingService : IMessagingService
+    public class MessagingService
     {
+        private static MessagingService instance;
+
         private static readonly TelegramBotClient _client = new TelegramBotClient(Const.TelegramToken);
 
-        private int lectureId;
-        private string _presentationId;
-        private SlidesService _slidesService;
+        private static int _lectureId;
+        private static string _presentationId;
+        private static SlidesService _slidesService;
 
-        private IList<Page> _pages; 
+        private static IList<Page> _pages; 
 
         static string[] Scopes = { SlidesService.Scope.PresentationsReadonly };
         static string ApplicationName = "Google Slides API .NET Quickstart";
@@ -32,9 +34,9 @@ namespace TelegramAccess.Services
         private static ChatId _chat = new ChatId(Const.ChatId);
 
 
-        public MessagingService(int lectureId)
+        public static void NewInstance(int lectureId)
         {
-            this.lectureId = lectureId;
+            _lectureId = lectureId;
             string lectureAdress = Const.PresentationAdresses[lectureId];
             string stringId = lectureAdress.Split('/')[5];
             UserCredential credential;
@@ -86,7 +88,7 @@ namespace TelegramAccess.Services
             SendStream(streamI);
         }
 
-        public void ParsePage(int i) 
+        public static void ParsePage(int i) 
         {
             var thumbnail = new PresentationsResource.PagesResource.GetThumbnailRequest(_slidesService, _presentationId, _pages[i].ObjectId);
             Thumbnail v = thumbnail.Execute();
@@ -100,6 +102,15 @@ namespace TelegramAccess.Services
 
             System.IO.Stream streamI = webResponse.GetResponseStream();
             SendStream(streamI);
+            if (i == _pages.Count - 1) 
+            {
+                Reset();
+            }
+        }
+
+        public static void Reset() 
+        {
+            _lectureId = -1;
         }
 
         public void SendText(string message) 
@@ -116,7 +127,7 @@ namespace TelegramAccess.Services
             }
         }
 
-        public void SendStream(Stream stream) 
+        public static void SendStream(Stream stream) 
         {
             InputOnlineFile file = new InputOnlineFile(stream);
             _client.SendPhotoAsync(_chat, file);

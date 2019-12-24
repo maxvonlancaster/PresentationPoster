@@ -58,8 +58,9 @@ namespace PresentationPoster.Controllers
         {
             if (item.I == 1) 
             {
-                _messagingService = new MessagingService(_lectureId);
+                MessagingService.NewInstance(item.lectureId);
             }
+            MessagingService.ParsePage(item.I);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -72,5 +73,6 @@ namespace PresentationPoster.Controllers
     public class ItemSent
     {
         public int I { get; set; }
+        public int lectureId { get; set; }
     }
 }
