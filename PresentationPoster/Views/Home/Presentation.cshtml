@@ -17,33 +17,42 @@
         height: 100%;
         position: absolute;
     }
+
+    #lectureId {
+        display: none;
+    }
 </style>
 
-<h1>Presentation</h1>
+
 
 <div>
-    <h4>Lecture</h4>
+    @*<h4>Lecture</h4>*@
+    <h1>Лекція @Html.DisplayFor(model => model.LectureTheme)</h1>
     <hr />
-    <dl class="row">
-        <dt  class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd id="lectureId" class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lecturer)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lecturer)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LectureTheme)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LectureTheme)
-        </dd>
-    </dl>
+    <div id="lectureId">@Html.DisplayFor(model => model.Id)</div>
+    <div class="row">
+        @*<dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd id="lectureId" class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Lecturer)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Lecturer)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LectureTheme)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LectureTheme)
+            </dd>*@
+        <div class="col-sm-2">
+            <p>by @Html.DisplayFor(model => model.Lecturer)</p>
+        </div>
+    </div>
 </div>
 
 <div id="wrapper" class="text-center" onclick="Handler(event)" onkeypress="Click(event)">
@@ -54,10 +63,10 @@
     </iframe>
     <div id="o"></div>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+@*<div>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Back to List</a>
+    </div>*@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
@@ -76,8 +85,7 @@
     $(document).ready(function () {
         document.addEventListener("keydown", function (event) {
             console.log(event.which);
-            if (event.which == 37)
-            {
+            if (event.which == 37) {
                 let elem = document.getElementById("frame");
                 elem.focus();
             }
@@ -88,7 +96,7 @@
 
     function Send(i) {
         console.log("Lecture: ", lectureId);
-        const response = fetch("../SendPage/" + i + "", {
+        const response = fetch("../SendPage/", {
             method: 'POST',
             headers: {
                 'accept': 'application/json',
@@ -99,8 +107,8 @@
                 'lectureId': lectureId
             })
         });
-            //.then(res => res.json())
-            //.then((result) => { console.log(result) });
+        //.then(res => res.json())
+        //.then((result) => { console.log(result) });
     }
 
     //document.getElementsByName("frame")[0].contentWindow.document.body.focus();

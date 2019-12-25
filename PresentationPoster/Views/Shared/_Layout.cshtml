@@ -6,12 +6,17 @@
     <title>@ViewData["Title"] - PresentationPoster</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style >
+        #main-page {
+            margin-top: 80px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 header-custom">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PresentationPoster</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">15x4 Чернівці</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,7 +32,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" id="main-page">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -35,7 +40,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - PresentationPoster - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            15x4 Чернівці - @*<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

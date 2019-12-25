@@ -56,11 +56,11 @@ namespace PresentationPoster.Controllers
         //[Route("Presentation/Home/SendPage/{i}")]
         public void SendPage([FromBody]ItemSent item) 
         {
-            if (item.I == 1) 
+            if (item.i == 1) 
             {
                 MessagingService.NewInstance(item.lectureId);
             }
-            MessagingService.ParsePage(item.I);
+            MessagingService.ParsePage(item.i);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -72,7 +72,7 @@ namespace PresentationPoster.Controllers
 
     public class ItemSent
     {
-        public int I { get; set; }
+        public int i { get; set; }
         public int lectureId { get; set; }
     }
 }

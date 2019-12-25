@@ -30,9 +30,24 @@ namespace PresentationPoster.Services
             throw new NotImplementedException();
         }
 
-        public Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (userId == Const.UserName.ToUpper())
+            {
+                Task<IdentityUser> task = Task.Run(() =>
+                {
+                    return new IdentityUser() { UserName = userId };
+                });
+                return await task;
+            }
+            else 
+            {
+                Task<IdentityUser> task = Task.Run(() =>
+                {
+                    return new IdentityUser();
+                });
+                return await task;
+            }
         }
 
         public async Task<IdentityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
@@ -44,7 +59,15 @@ namespace PresentationPoster.Services
                 });
                 return await task;
             }
-            throw new NotImplementedException();
+            else
+            {
+                Task<IdentityUser> task = Task.Run(() =>
+                {
+                    return new IdentityUser();
+                });
+                return await task;
+            }
+            throw new NotImplementedException(); //
         }
 
         public Task<string> GetEmailAsync(IdentityUser user, CancellationToken cancellationToken)
