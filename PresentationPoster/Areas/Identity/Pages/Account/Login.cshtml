@@ -1,5 +1,9 @@
 ﻿@page
 @model LoginModel
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<TelegramAccess.Entities.User> SignInManager
+@inject UserManager<TelegramAccess.Entities.User> UserManager
 
 @{
     ViewData["Title"] = "Log in";

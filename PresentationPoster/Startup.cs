@@ -38,8 +38,10 @@ namespace PresentationPoster
             services.AddDbContext<PresentationContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<PresentationContext>();
+            services.AddDefaultIdentity<User>()
+                .AddEntityFrameworkStores<PresentationContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
             //    .AddUserStore<CustomUserStore>();
             //.AddUserManager<UserManager<IdentityUser>>()
