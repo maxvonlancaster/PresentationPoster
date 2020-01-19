@@ -8,5 +8,6 @@ namespace TelegramAccess.Entities
 {
     public class User : IdentityUser<int>
     {
+        public string Telegram { get; set; }
     }
 }
