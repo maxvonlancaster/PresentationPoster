@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TelegramAccess.Entities;
 
 namespace TelegramAccess.Repositories.Interfaces
 {
     public interface IPresentationRepository
     {
-        void Create(Presentation presentation);
-        void Edit(int id, Presentation presentation);
-        void Delete(int id);
-        Presentation Get(int id);
-        List<Presentation> GetAll();
+        Task Create(Presentation presentation);
+        Task Edit(Presentation presentation);
+        Task Delete(int id);
+        Task<Presentation> Get(int id);
+        Task<List<Presentation>> GetAll();
+        bool PresentationExists(int id);
     }
 }

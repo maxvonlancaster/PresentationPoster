@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TelegramAccess.Entities;
 using TelegramAccess.Repositories.Interfaces;
 
@@ -8,29 +11,47 @@ namespace TelegramAccess.Repositories
 {
     public class PresentationRepository : IPresentationRepository
     {
-        public void Create(Presentation presentation)
+        private readonly PresentationContext _context;
+
+        public PresentationRepository(PresentationContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public void Delete(int id)
+        public async Task Create(Presentation presentation)
         {
-            throw new NotImplementedException();
+            _context.Add(presentation);
+            await _context.SaveChangesAsync();
         }
 
-        public void Edit(int id, Presentation presentation)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var presentation = await _context.Presentations.FindAsync(id);
+            _context.Presentations.Remove(presentation);
+            await _context.SaveChangesAsync();
         }
 
-        public Presentation Get(int id)
+        public async Task Edit(Presentation presentation)
         {
-            throw new NotImplementedException();
+            _context.Update(presentation);
+            await _context.SaveChangesAsync();
         }
 
-        public List<Presentation> GetAll()
+        public async Task<Presentation> Get(int id)
         {
-            throw new NotImplementedException();
+            var presentation = await _context.Presentations
+                .FirstOrDefaultAsync(m => m.Id == id);
+            return presentation;
+        }
+
+        public async Task<List<Presentation>> GetAll()
+        {
+            return await _context.Presentations.ToListAsync();
+        }
+
+        public bool PresentationExists(int id) 
+        {
+            return _context.Presentations.Any(e => e.Id == id);
         }
     }
 }
