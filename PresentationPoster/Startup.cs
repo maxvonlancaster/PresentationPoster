@@ -17,6 +17,8 @@ using TelegramAccess.Services;
 using PresentationPoster.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using TelegramAccess.Entities;
+using TelegramAccess.Repositories.Interfaces;
+using TelegramAccess.Repositories;
 
 namespace PresentationPoster
 {
@@ -34,6 +36,9 @@ namespace PresentationPoster
         {
             services.AddTransient<ILectureService, LectureService>();
             services.AddTransient<IParserService, ParserService>();
+            services.AddTransient<IPresentationRepository, PresentationRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepository>();
+
 
             services.AddDbContext<PresentationContext>(options =>
                 options.UseSqlServer(
