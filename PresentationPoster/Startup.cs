@@ -38,6 +38,10 @@ namespace PresentationPoster
             services.AddTransient<IParserService, ParserService>();
             services.AddTransient<IPresentationRepository, PresentationRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+
+
+            services.AddSingleton<ISyncService, SyncService>();
 
 
             services.AddDbContext<PresentationContext>(options =>

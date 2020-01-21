@@ -6,24 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TelegramAccess.Entities;
+using TelegramAccess.Repositories;
+using TelegramAccess.Repositories.Interfaces;
 
 namespace PresentationPoster.Controllers
 {
     public class PresentationsController : Controller
     {
-        private readonly PresentationContext _context;
+        private readonly IPresentationRepository _presentationRepository;
 
-
-
-        public PresentationsController(PresentationContext context)
+        public PresentationsController(IPresentationRepository presentationRepository)
         {
-            _context = context;
+            _presentationRepository = presentationRepository;
         }
 
         // GET: Presentations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Presentations.ToListAsync());
+            return View(await _presentationRepository.GetAll());
         }
 
         // GET: Presentations/Details/5
@@ -34,8 +34,7 @@ namespace PresentationPoster.Controllers
                 return NotFound();
             }
 
-            var presentation = await _context.Presentations
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var presentation = await _presentationRepository.Get((int)id);
             if (presentation == null)
             {
                 return NotFound();
@@ -59,8 +58,7 @@ namespace PresentationPoster.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(presentation);
-                await _context.SaveChangesAsync();
+                await _presentationRepository.Create(presentation);
                 return RedirectToAction(nameof(Index));
             }
             return View(presentation);
@@ -74,7 +72,7 @@ namespace PresentationPoster.Controllers
                 return NotFound();
             }
 
-            var presentation = await _context.Presentations.FindAsync(id);
+            var presentation = await _presentationRepository.Get((int)id);
             if (presentation == null)
             {
                 return NotFound();
@@ -98,8 +96,7 @@ namespace PresentationPoster.Controllers
             {
                 try
                 {
-                    _context.Update(presentation);
-                    await _context.SaveChangesAsync();
+                    await _presentationRepository.Edit(presentation);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,8 +122,7 @@ namespace PresentationPoster.Controllers
                 return NotFound();
             }
 
-            var presentation = await _context.Presentations
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var presentation = await _presentationRepository.Get((int)id);
             if (presentation == null)
             {
                 return NotFound();
@@ -140,15 +136,13 @@ namespace PresentationPoster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var presentation = await _context.Presentations.FindAsync(id);
-            _context.Presentations.Remove(presentation);
-            await _context.SaveChangesAsync();
+            await _presentationRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool PresentationExists(int id)
         {
-            return _context.Presentations.Any(e => e.Id == id);
+            return _presentationRepository.PresentationExists(id);
         }
     }
 }

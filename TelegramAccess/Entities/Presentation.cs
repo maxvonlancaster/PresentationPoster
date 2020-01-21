@@ -9,6 +9,7 @@ namespace TelegramAccess.Entities
     {
         [Key]
         public int Id { get; set; }
+        public string Name { get; set; }
         public User User { get; set; }
         public byte[] File { get; set; }
     }
