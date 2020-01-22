@@ -28,6 +28,7 @@ namespace PresentationPoster.Controllers
         public ActionResult GetSlide() 
         {
             byte[] image = _syncService.GetImage();
+            Guid guid = _syncService.Guid;
             ViewImage viewImage = new ViewImage() { Image = image };
             return Json(viewImage);
         }

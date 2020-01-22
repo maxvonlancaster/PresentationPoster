@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Syncfusion.Presentation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -97,11 +99,24 @@ namespace TelegramAccess.Services
             int userRole;
             if (int.TryParse(data[1], out userRole) && userRole == 0)
             {
+                Images = null;
+                var presentationEntity = await _presentationRepository.GetByName(data[1]);
+                using (Stream stream = new MemoryStream(presentationEntity.File)) 
+                {
+                    IPresentation presentation = Syncfusion.Presentation.Presentation.Open(stream);
+                    foreach (var i in presentation.Slides) 
+                    {
+                        Images.Add(((MemoryStream)i.ConvertToImage(ExportImageFormat.Png)).ToArray());
+                    }
+                }
+            }
+            else if (int.TryParse(data[1], out userRole) && userRole == 1)
+            {
 
             }
-            else if (int.TryParse(data[1], out userRole) && userRole == 1) 
+            else if (int.TryParse(data[1], out userRole) && userRole == 2) 
             {
-            
+                
             }
         }
     }
