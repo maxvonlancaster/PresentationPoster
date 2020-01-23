@@ -41,7 +41,7 @@ namespace PresentationPoster
             services.AddTransient<IUserRepository, UserRepository>();
 
 
-            services.AddSingleton<ISyncService, SyncService>();
+            services.AddScoped<ISyncService, SyncService>();
 
 
             services.AddDbContext<PresentationContext>(options =>

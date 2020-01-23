@@ -31,7 +31,7 @@ namespace TelegramAccess.Services
 
         public List<byte[]> Images { get => _images; set => _images = value; }
         public int Current { get => _current; set => _current = value; }
-        public Guid Guid { get => _guid; set => _guid = value; }
+        public Guid Guid { get => _guid; set => _guid = value; } // INTO SEPARATE SINGLETON
 
         public SyncService(IUserRepository userRepository, IPresentationRepository presentationRepository)
         {
