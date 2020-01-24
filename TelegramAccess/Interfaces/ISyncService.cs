@@ -6,11 +6,11 @@ namespace TelegramAccess.Interfaces
 {
     public interface ISyncService
     {
-        List<byte[]> Images { get; set; }
-        int Current { get; set; }
-        Guid Guid { get; set; }
+        //List<byte[]> Images { get; set; }
+        //int Current { get; set; }
+        //Guid Guid { get; set; }
 
-        byte[] GetImage();
+        //byte[] GetImage();
         void StartReceiving();
     }
 }

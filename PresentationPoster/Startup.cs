@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using TelegramAccess.Entities;
 using TelegramAccess.Repositories.Interfaces;
 using TelegramAccess.Repositories;
+using TelegramAccess.Models;
 
 namespace PresentationPoster
 {
@@ -42,6 +43,8 @@ namespace PresentationPoster
 
 
             services.AddScoped<ISyncService, SyncService>();
+
+            services.AddSingleton<IImageHolder, ImageHolder>();
 
 
             services.AddDbContext<PresentationContext>(options =>

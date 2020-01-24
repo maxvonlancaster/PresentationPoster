@@ -15,6 +15,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 using TelegramAccess.Constants;
 using TelegramAccess.Entities;
 using TelegramAccess.Interfaces;
+using TelegramAccess.Models;
 using TelegramAccess.Repositories.Interfaces;
 
 namespace TelegramAccess.Services
@@ -24,19 +25,23 @@ namespace TelegramAccess.Services
         private static readonly TelegramBotClient _client = new TelegramBotClient(Const.TelegramToken);
         private readonly IUserRepository _userRepository;
         private readonly IPresentationRepository _presentationRepository;
+        private readonly IImageHolder _imageHolder;
 
-        private List<byte[]> _images;
-        private int _current;
-        private Guid _guid; // may be a bad design idea; INCAPSULATE!
+        //private List<byte[]> _images;
+        //private int _current;
+        //private Guid _guid; // may be a bad design idea; INCAPSULATE!
 
-        public List<byte[]> Images { get => _images; set => _images = value; }
-        public int Current { get => _current; set => _current = value; }
-        public Guid Guid { get => _guid; set => _guid = value; } // INTO SEPARATE SINGLETON
+        //public List<byte[]> Images { get => _images; set => _images = value; }
+        //public int Current { get => _current; set => _current = value; }
+        //public Guid Guid { get => _guid; set => _guid = value; } // INTO SEPARATE SINGLETON
 
-        public SyncService(IUserRepository userRepository, IPresentationRepository presentationRepository)
+        public SyncService(IUserRepository userRepository, 
+            IPresentationRepository presentationRepository,
+            IImageHolder imageHolder)
         {
             _userRepository = userRepository;
             _presentationRepository = presentationRepository;
+            _imageHolder = imageHolder;
         }
 
         public void StartReceiving() 
@@ -58,10 +63,10 @@ namespace TelegramAccess.Services
             });
         }
 
-        public byte[] GetImage() 
-        {
-            return _images[_current];
-        } 
+        //public byte[] GetImage() 
+        //{
+        //    return _images[_current];
+        //} 
 
         private async void OnFirstMessage(object sender, MessageEventArgs e)
         {
@@ -99,14 +104,14 @@ namespace TelegramAccess.Services
             int userRole;
             if (int.TryParse(data[1], out userRole) && userRole == 0)
             {
-                Images = null;
+                _imageHolder.Images = null;
                 var presentationEntity = await _presentationRepository.GetByName(data[1]);
                 using (Stream stream = new MemoryStream(presentationEntity.File)) 
                 {
                     IPresentation presentation = Syncfusion.Presentation.Presentation.Open(stream);
                     foreach (var i in presentation.Slides) 
                     {
-                        Images.Add(((MemoryStream)i.ConvertToImage(ExportImageFormat.Png)).ToArray());
+                        _imageHolder.Images.Add(((MemoryStream)i.ConvertToImage(ExportImageFormat.Png)).ToArray());
                     }
                 }
             }
