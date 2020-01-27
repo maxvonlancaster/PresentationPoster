@@ -49,9 +49,12 @@ namespace TelegramAccess.Repositories
             return await _context.Presentations.ToListAsync();
         }
 
-        public async Task<List<Presentation>> GetByUser(int userId) 
+        public async Task<List<Presentation>> GetByUser(string userName) 
         {
-            return await _context.Presentations.Where(p => p.User.Id == userId).ToListAsync();
+            var res = await _context.Presentations.Include(p => p.User)
+                .Where(p => p.User.UserName == userName)
+                .ToListAsync();
+            return res;
         }
 
         public async Task<Presentation> GetByName(string name) 

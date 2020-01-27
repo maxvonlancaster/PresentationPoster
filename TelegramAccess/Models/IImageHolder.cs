@@ -9,6 +9,7 @@ namespace TelegramAccess.Models
         List<byte[]> Images { get; set; }
         int Current { get; set; }
         Guid Guid { get; set; }
+        string Message { get; set; }
 
         byte[] GetImage();
     }

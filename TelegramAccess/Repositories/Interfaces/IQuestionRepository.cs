@@ -14,5 +14,6 @@ namespace TelegramAccess.Repositories.Interfaces
         Task<Question> Get(int id);
         Task<List<Question>> GetAll();
         bool QuestionExists(int id);
+        Task<List<Question>> GetByPresentation(int presentationId);
     }
 }

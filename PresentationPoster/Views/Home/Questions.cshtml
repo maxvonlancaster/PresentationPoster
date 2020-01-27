@@ -1,0 +1,117 @@
+﻿@model IEnumerable<TelegramAccess.Entities.Question>
+@{
+    ViewData["Title"] = "Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+<h1>Questions</h1>
+
+<div class="input-group">
+    <div class="form-group">
+        Ваше запитання:<br>
+        <input class="form-control" id="sentenceInput" type="text" name="firstname" value=""><br>
+    </div>
+    <div class="form-group">
+
+        Перший варіант:<br>
+        <input class="form-control" type="text" id="firstOption" value=""><br><br>
+    </div>
+    <div class="form-group">
+
+        Другий варіант:<br>
+        <input class="form-control" type="text" id="secondOption" value=""><br><br>
+    </div>
+    <div class="form-group">
+
+        Третій варіант:<br>
+        <input class="form-control" type="text" id="thirdOption" value=""><br><br>
+    </div>
+    <div class="form-group">
+
+        Четвертий варіант:<br>
+        <input class="form-control" type="text" id="fourthOption" value=""><br><br>
+    </div>
+    <div class="form-group">
+
+        <select class="custom-select form-control" id="inputGroupCorrect">
+            <option selected>Choose...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+    </div>
+    <div class="form-group">
+
+        <input class="form-control" type="text" id="slide" value=""><br><br>
+    </div>
+    <div class="form-group">
+
+        <button class="btn btn-outline-secondary" type="button" value="Submit" onclick="SubmitQuestion()" />
+    </div>
+
+</div>
+
+    <table class="table table-bordered table-hover table-movies table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sentence)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sentence)
+                    </td>
+                    <td>
+                        @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function SubmitQuestion() {
+        var sentence = $("#sentenceInput").val();
+        var first = $("#firstOption").val();
+        var second = $("#secondOption").val();
+        var third = $("#thirdOption").val();
+        var fourth = $("#fourthOption").val();
+        var options = first + ";" + second + ";" + third + ";" + fourth;
+        var correct = Number($("#inputGroupCorrect").children("option:selected").val());
+        var slide = Number($("#slide").val());
+        console.log(sentence);
+
+        var p = @ViewContext.RouteData.Values["id"];
+
+        const response = fetch("/PostQuestion", {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                'presentation': p,
+                'sentence': sentence,
+                'options': options,
+                'correct': correct,
+                'slide': slide
+            })
+        });
+
+        return false;
+    }
+    </script>

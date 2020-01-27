@@ -9,25 +9,72 @@
     </div>*@
 <link rel="stylesheet" href="~/css/site.css" />
 
+
+@*<input type="file" name="FileUpload1" id="fileUpload" />
+<br />
+<input id="btnUploadFile" type="button" value="Upload File" />*@
+
+
+<form method="post" asp-action="FileUpload" asp-controller="Home" enctype="multipart/form-data">
+    <input type="file" name="files" multiple />
+    <input type="submit" value="Upload" />
+</form>
+
+
+<form method="post" asp-action="TelegramId" asp-controller="Home" enctype="multipart/form-data">
+    <input type="text" name="telegramId" multiple />
+    <input type="submit" value="Upload" />
+</form>
+
 <div>
     <ul id="themes" class="list-group"></ul>
 
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     var result;
     const get = fetch("/getLectures")
         .then(res => res.json())
         .then((res) => { result = res; PopulateResult(res); });
+    console.log(result);
 
     function PopulateResult(res) {
-        console.log(res);
         res.forEach(elem => {
-            $("#themes").append('<li class="text-center list-group-item" id="' + elem.id + '"> <div class="panel-body"> <p>' + elem.lecturer + '</p> <p>' + elem.lectureTheme + '</p> <a href=/Home/Presentation/' + elem.id + '> Переглянути презентацію </a> </div> </li>');
+            $("#themes").append('<li class="text-center list-group-item" id="' +
+                elem.id +
+                '"> <div class="panel-body"> <p>'
+                + elem.id + '</p> <p>' + elem.name +
+                '</p> <a href=/Home/Questions/' + elem.id +
+                '> Добавити запитання </a> </div> </li>');
         });
 
     }
+
+
+
+    //$(document).ready(function () {
+    //    $('#btnUploadFile').on('click', function () {
+    //        var data = new FormData();
+    //        var file = $("#fileUpload").get(0).files[0];
+    //        console.log(file);
+
+    //        // Add the uploaded image content to the form data collection
+    //        data.append("UploadedImage", file);
+    //        console.log(data);
+
+    //        // Make Ajax request with the contentType = false, and procesDate = false
+    //        var ajaxRequest = fetch("api/Slide/UploadFile", {
+    //            method: "POST",
+    //            headers: {
+    //                'accept': 'application/json',
+    //                'content-type': 'application/json'
+    //            },
+    //            body: JSON.stringify({'data': data })
+    //        });
+    //    });
+    //});
 </script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 

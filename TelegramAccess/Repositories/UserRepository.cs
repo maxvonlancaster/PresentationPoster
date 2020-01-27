@@ -54,6 +54,11 @@ namespace TelegramAccess.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Telegram == telegId);
         }
 
+        public async Task<User> GetByUserName(string userName) 
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        }
+
         public bool UserExists(string telegId)
         {
             return _context.Users.Any(e => e.Telegram == telegId);

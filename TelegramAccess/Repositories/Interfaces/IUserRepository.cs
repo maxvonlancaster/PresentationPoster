@@ -14,6 +14,7 @@ namespace TelegramAccess.Repositories.Interfaces
         Task<User> Get(int id);
         Task<List<User>> GetAll();
         Task<User> GetByTelegramId(string telegId);
+        Task<User> GetByUserName(string userName);
         bool UserExists(string telegId);
     }
 }

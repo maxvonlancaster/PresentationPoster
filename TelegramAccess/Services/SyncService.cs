@@ -73,7 +73,7 @@ namespace TelegramAccess.Services
             var user = await _userRepository.GetByTelegramId(e.Message.From.Username);
             if (user != null)
             {
-                var presentations = (await _presentationRepository.GetByUser(user.Id)).Select(x => x.Name);
+                var presentations = (await _presentationRepository.GetByUser(user.UserName)).Select(x => x.Name);
                 var text = "Please select a presentation:";
 
                 List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>();
@@ -89,11 +89,11 @@ namespace TelegramAccess.Services
             }
             else 
             {
-                string text = "Do you want to start receiving current presentation?";
-                InlineKeyboardButton button = new InlineKeyboardButton();
-                button.CallbackData = $"{user.Id}:{0}:{1}";
-                InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
-                await _client.SendTextMessageAsync(e.Message.From.Id, text, replyMarkup: markup);
+                //string text = "Do you want to start receiving current presentation?";
+                //InlineKeyboardButton button = new InlineKeyboardButton();
+                //button.CallbackData = $"{user.Id}:{0}:{1}";
+                //InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
+                //await _client.SendTextMessageAsync(e.Message.From.Id, text, replyMarkup: markup);
             }
 
         }
@@ -102,7 +102,7 @@ namespace TelegramAccess.Services
         {
             string[] data = e.CallbackQuery.Data.Split(':');
             int userRole;
-            if (int.TryParse(data[1], out userRole) && userRole == 0)
+            if (int.TryParse(data[2], out userRole) && userRole == 0)
             {
                 _imageHolder.Images = null;
                 var presentationEntity = await _presentationRepository.GetByName(data[1]);
@@ -113,16 +113,29 @@ namespace TelegramAccess.Services
                     {
                         _imageHolder.Images.Add(((MemoryStream)i.ConvertToImage(ExportImageFormat.Png)).ToArray());
                     }
+                    _imageHolder.Current = 1;
+                    _imageHolder.Guid = new Guid();
                 }
+
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.CallbackData = $"{data[1]}:1:{1}";
+                button.Text = "\\|/";
+
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
+
+
+                await _client.SendPhotoAsync(data[1], "Next page", replyMarkup: markup);
             }
             else if (int.TryParse(data[1], out userRole) && userRole == 1)
             {
+                _imageHolder.Current++;
+                int i = _imageHolder.Current;
 
             }
-            else if (int.TryParse(data[1], out userRole) && userRole == 2) 
-            {
+            //else if (int.TryParse(data[1], out userRole) && userRole == 2) 
+            //{
                 
-            }
+            //}
         }
     }
 }

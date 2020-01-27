@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TelegramAccess.Entities;
 using TelegramAccess.Interfaces;
@@ -36,10 +37,23 @@ namespace PresentationPoster.Controllers
             return Json(viewImage);
         }
 
+        [HttpPost]
+        [Route("UploadFile")]
+        public IActionResult UploadFile([FromBody]FileUpload file) 
+        {
+            var r = Request;
+            return View("Home/Index");
+        }
+
         public class ViewImage 
         {
             public byte[] Image { get; set; }
             public Question Question { get; set; }
+        }
+
+        public class FileUpload 
+        {
+            public IFormFile data { get; set; }
         }
     }
 }
