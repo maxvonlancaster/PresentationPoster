@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +25,7 @@ namespace PresentationPoster.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(/*"Index"*/);
         }
 
         [HttpGet]
@@ -33,8 +34,19 @@ namespace PresentationPoster.Controllers
         {
             byte[] image = _imageHolder.GetImage();
             Guid guid = _imageHolder.Guid;
-            ViewImage viewImage = new ViewImage() { Image = image };
+            MemoryStream stream = new MemoryStream(image);
+            string converted = Convert.ToBase64String(stream.ToArray());
+            ViewImage viewImage = new ViewImage() { Image = converted,  Guid = guid };
+
             return Json(viewImage);
+        }
+
+        [HttpGet]
+        [Route("getGuid")]
+        public ActionResult GetGuid() 
+        {
+            Guid guid = _imageHolder.Guid;
+            return Json(guid);
         }
 
         [HttpPost]
@@ -47,8 +59,10 @@ namespace PresentationPoster.Controllers
 
         public class ViewImage 
         {
-            public byte[] Image { get; set; }
+            public string Image { get; set; }
             public Question Question { get; set; }
+            public Guid Guid { get; set; }
+            public bool Last { get; set; }
         }
 
         public class FileUpload 

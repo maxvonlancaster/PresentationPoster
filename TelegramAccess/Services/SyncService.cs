@@ -123,7 +123,6 @@ namespace TelegramAccess.Services
 
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
 
-
                 await _client.SendPhotoAsync(data[1], "Next page", replyMarkup: markup);
             }
             else if (int.TryParse(data[1], out userRole) && userRole == 1)
@@ -131,6 +130,13 @@ namespace TelegramAccess.Services
                 _imageHolder.Current++;
                 int i = _imageHolder.Current;
 
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.CallbackData = $"{data[1]}:{i}:{1}";
+                button.Text = "\\|/";
+
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
+
+                await _client.EditMessageReplyMarkupAsync(data[1], markup);
             }
             //else if (int.TryParse(data[1], out userRole) && userRole == 2) 
             //{
