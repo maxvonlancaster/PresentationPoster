@@ -53,6 +53,11 @@ namespace TelegramAccess.Repositories
         {
             var res = await _context.Presentations.Include(p => p.User) // REFACTOR THIS
                 .Where(p => p.User.UserName == userName)
+                .Select(p => new Presentation() 
+                { 
+                    Id = p.Id,
+                    Name = p.Name
+                })
                 .ToListAsync();
             return res;
         }
