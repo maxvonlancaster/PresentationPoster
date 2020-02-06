@@ -22,7 +22,7 @@ namespace PresentationPoster.Controllers
 
         [HttpGet]
         [Route("getQuestions")]
-        public async Task<IActionResult> GetQuestions() 
+        public async Task<IActionResult> GetQuestions()
         {
             var questions = await _questionRepository.GetAll();
             return new JsonResult(questions);
@@ -30,7 +30,7 @@ namespace PresentationPoster.Controllers
 
         [HttpGet]
         [Route("getQuestion")]
-        public async Task<IActionResult> GetQuestion([FromBody] int i) 
+        public async Task<IActionResult> GetQuestion([FromBody] int i)
         {
             var question = await _questionRepository.Get(i);
             return new JsonResult(question);
@@ -38,12 +38,26 @@ namespace PresentationPoster.Controllers
 
         [HttpPost]
         [Route("postQuestion")]
-        public async Task<IActionResult> PostQuestion([FromBody] Question question) 
+        public async Task<IActionResult> PostQuestion([FromBody] Question question)
         {
             await _questionRepository.Create(question);
             return new JsonResult(true);
         }
 
+        [HttpPost]
+        [Route("deleteQuestion")]
+        public async Task<IActionResult> DeleteQuestion([FromBody]int i)
+        {
+            await _questionRepository.Delete(i);
+            return new JsonResult(true);
+        }
 
+        [HttpPost]
+        [Route("editQuestion")]
+        public async Task<IActionResult> EditQuestion([FromBody]Question question)
+        {
+            await _questionRepository.Edit(question);
+            return new JsonResult(true);
+        }
     }
 }
