@@ -30,7 +30,7 @@ namespace PresentationPoster.Controllers
 
         [HttpGet]
         [Route("getSlide")]
-        public ActionResult GetSlide() 
+        public ActionResult GetSlide()
         {
             byte[] image = _imageHolder.GetImage();
             Guid guid = _imageHolder.Guid;

@@ -30,7 +30,7 @@ namespace PresentationPoster.Controllers
 
         [HttpGet]
         [Route("getQuestion")]
-        public async Task<IActionResult> GetQuestion([FromBody] int i)
+        public async Task<IActionResult> GetQuestion([FromBody]int i)
         {
             var question = await _questionRepository.Get(i);
             return new JsonResult(question);
@@ -38,7 +38,7 @@ namespace PresentationPoster.Controllers
 
         [HttpPost]
         [Route("postQuestion")]
-        public async Task<IActionResult> PostQuestion([FromBody] Question question)
+        public async Task<IActionResult> PostQuestion([FromBody]Question question)
         {
             await _questionRepository.Create(question);
             return new JsonResult(true);
