@@ -27,14 +27,6 @@ namespace TelegramAccess.Services
         private readonly IPresentationRepository _presentationRepository;
         private readonly IImageHolder _imageHolder;
 
-        //private List<byte[]> _images;
-        //private int _current;
-        //private Guid _guid; // may be a bad design idea; INCAPSULATE!
-
-        //public List<byte[]> Images { get => _images; set => _images = value; }
-        //public int Current { get => _current; set => _current = value; }
-        //public Guid Guid { get => _guid; set => _guid = value; } // INTO SEPARATE SINGLETON
-
         public SyncService(IUserRepository userRepository, 
             IPresentationRepository presentationRepository,
             IImageHolder imageHolder)
@@ -62,11 +54,6 @@ namespace TelegramAccess.Services
                 }
             });
         }
-
-        //public byte[] GetImage() 
-        //{
-        //    return _images[_current];
-        //} 
 
         private async void OnFirstMessage(object sender, MessageEventArgs e)
         {
@@ -123,7 +110,7 @@ namespace TelegramAccess.Services
 
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
 
-                await _client.SendPhotoAsync(data[1], "Next page", replyMarkup: markup);
+                await _client.SendTextMessageAsync(data[1], "Next page", replyMarkup: markup);
             }
             else if (int.TryParse(data[1], out userRole) && userRole == 1)
             {

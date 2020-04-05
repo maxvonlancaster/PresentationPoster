@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +25,12 @@ namespace PresentationPoster.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            //Response.Cookies.Delete(".AspNetCore.Identity.Application");
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
