@@ -69,40 +69,43 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const guid = 0;
-    const last = false;
+    //const guid = 0;
+    //const last = false;
 
-    $("document").ready(function () {
-        while (true) {
-            GetGuid();
-            if (last) {
-                break;
-            }
-            setTimeout(function () {
-            }, 1000);
-        }
-    })
+    //$("document").ready(function () {
+    //    while (true) {
+    //        GetGuid();
+    //        if (last) {
+    //            break;
+    //        }
+    //        setTimeout(function () {
+    //        }, 1000);
+    //    }
+    //})
 
-    function GetImage() {
-        const get = fetch("/getSlide")
-            .then(res => res.json())
-            .then((res) => { PopulateResult(res); });
-        console.log(result);
-    }
+    //function GetImage() {
+    //    const get = fetch("/getSlide")
+    //        .then(res => res.json())
+    //        .then((res) => { PopulateResult(res); });
+    //    console.log(result);
+    //}
 
-    function GetGuid() {
-        const get = fetch("/getGuid")
-            .then(res => res.json())
-            .then((res) => {
-                if (res.guid != guid) {
-                    GetImage();
-                }
-            })
-    }
+    //function GetGuid() {
+    //    const get = fetch("/getGuid")
+    //        .then(res => res.json())
+    //        .then((res) => {
+    //            if (res.guid != guid) {
+    //                GetImage();
+    //            }
+    //        })
+    //}
 
-    function PopulateResult(res) {
-        $("#ItemPreview").attr('src', 'data:image/png;base64,' + res.image);
-        guid = res.guid;
-        last = res.last;
-    }
+    //function PopulateResult(res) {
+    //    $("#ItemPreview").attr('src', 'data:image/png;base64,' + res.image);
+    //    guid = res.guid;
+    //    last = res.last;
+    //}
+</script>
+<script>
+
 </script>
